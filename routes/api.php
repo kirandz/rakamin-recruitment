@@ -16,4 +16,5 @@ use Illuminate\Http\Request;
 
 Route::prefix('user')->group(function() {
     Route::post('/send-message', 'ApiController@sendMessage');
+    Route::post('/get-messages', 'ApiController@getMessages');
 });
