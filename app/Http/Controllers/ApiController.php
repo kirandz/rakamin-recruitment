@@ -161,4 +161,58 @@ class ApiController extends Controller
             ], 400);
         }
     }
+
+    /**
+     * Get conversations
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getConversations(Request $request)
+    {
+        try {
+            $conversations = DB::table('conversations')->select([
+                DB::raw("IF(sender_id > receiver_id, CONCAT_WS(',', receiver_id, sender_id), CONCAT_WS(',', sender_id, receiver_id)) as user_ids"),
+                DB::raw('GROUP_CONCAT(conversations.id) as conversation_ids'),
+            ])
+                ->where('sender_id', $request->user_id)
+                ->orWhere('receiver_id', $request->user_id)
+                ->groupBy('user_ids')
+                ->get();
+
+            $data = $conversations->map(function ($item) use ($request) {
+                $users = DB::table('users')->whereIn('id', explode(',', $item->user_ids))->get();
+                $conversations = DB::table('conversations')->whereIn('id', explode(',', $item->conversation_ids))->get();
+
+                $title = $users->pluck('name')->join('-');
+                $lastMessage = Message::select([
+                    'messages.*',
+                ])
+                    ->whereIn('messages.conversation_id', $conversations->pluck('id')->toArray())
+                    ->orderBy('messages.created_at', 'desc')
+                    ->firstOrNew([]);
+                $unreadMessage = $conversations->where('sender_id', $request->user_id)->first();
+
+                return [
+                    'title' => $title,
+                    'last_message' => [
+                        'user' => $lastMessage->conversation ? $lastMessage->conversation->sender->name : null,
+                        'message' => $lastMessage->message,
+                        'created_at' => $lastMessage->getOriginal('created_at'),
+                    ],
+                    'unread' => $unreadMessage->unread
+                ];
+            });
+
+            return response()->json([
+                'status' => 'SUCCESS',
+                'data' => $data
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'FAIL',
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
 }
