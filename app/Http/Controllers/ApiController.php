@@ -124,4 +124,41 @@ class ApiController extends Controller
             ], 400);
         }
     }
+
+    /**
+     * Reply message
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function replyMessage(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            /** @var Message $message */
+            $message = Message::findOrFail($request->message_id);
+
+            $reply = $message->children()->create([
+                'parent_id' => $message->id,
+                'conversation_id' => $message->conversation_id,
+                'message' => $request->message,
+            ]);
+
+            DB::commit();
+            return response()->json([
+                'status' => 'SUCCESS',
+                'data' => [
+                    'message_id' => $reply->id,
+                    'message' => $reply->message,
+                    'created_at' => $reply->getOriginal('created_at'),
+                ]
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'status' => 'FAIL',
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
 }
