@@ -14,18 +14,18 @@
 <ul>
     <li>
         Send Message <br/>
-        ![alt text](https://github.com/kirandz/rakamin-recruitment/public/images/documentation/send-message.png?raw=true)
+        ![alt text](https://github.com/kirandz/rakamin-recruitment/blob/master/public/images/documentation/send-message.png?raw=true)
     </li>
     <li>
         Get Messages <br/>
-        ![alt text](https://github.com/kirandz/rakamin-recruitment/public/images/documentation/get-messages.png?raw=true)
+        ![alt text](https://github.com/kirandz/rakamin-recruitment/blob/master/public/images/documentation/get-messages.png?raw=true)
     </li>
     <li>
         Reply Message <br/>
-        ![alt text](https://github.com/kirandz/rakamin-recruitment/public/images/documentation/reply-message.png?raw=true)
+        ![alt text](https://github.com/kirandz/rakamin-recruitment/blob/master/public/images/documentation/reply-message.png?raw=true)
     </li>
     <li>
         Get Conversations <br/>
-        ![alt text](https://github.com/kirandz/rakamin-recruitment/public/images/documentation/get-conversations.png?raw=true)
+        ![alt text](https://github.com/kirandz/rakamin-recruitment/blob/master/public/images/documentation/get-conversations.png?raw=true)
     </li>
 </ul>
