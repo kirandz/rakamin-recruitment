@@ -6,6 +6,7 @@
 
 <h2>Installation</h2>
 <pre>composer install</pre>
+<pre>php artisan migrate --seed</pre>
 
 <h2>Local Deployment</h2>
 <pre>php artisan serve</pre>
